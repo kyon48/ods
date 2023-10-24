@@ -1,0 +1,73 @@
+version: '3'
+
+networks:
+  islab:
+    external:
+      name: islab
+
+
+services:
+  ca.blockchain.islab.re.kr:
+      ports:
+        - 9054:9054
+      networks:
+        islab:
+          ipv4_address: 172.30.1.210
+      extra_hosts:
+        - "tlsca.blockchain.islab.re.kr:172.30.1.211"
+        - "peer0.blockchain.islab.re.kr:172.30.1.220"
+        - "dapp.islab.re.kr:172.30.1.109"
+
+  tlsca.blockchain.islab.re.kr:
+      ports:
+        - 9055:9055
+      networks:
+        islab:
+          ipv4_address: 172.30.1.211
+      extra_hosts:
+        - "ca.blockchain.islab.re.kr:172.30.1.210"
+        - "peer0.blockchain.islab.re.kr:172.30.1.220"
+        - "dapp.islab.re.kr:172.30.1.109"
+
+  couchdb.peer0.blockchain.islab.re.kr:
+    ports:
+      - 7984:5984
+    networks:
+      islab:
+        ipv4_address: 172.30.1.212
+    extra_hosts:
+      - "orderer0.islab.re.kr:172.30.1.100"
+      - "orderer1.islab.re.kr:172.30.1.101"
+      - "orderer2.islab.re.kr:172.30.1.102"
+      - "peer0.blockchain.islab.re.kr:172.30.1.220"
+      - "dapp.islab.re.kr:172.30.1.109"
+
+  peer0.blockchain.islab.re.kr:
+    ports:
+      - 9051:9051
+      - 9052:9052
+      - 9053:9053
+    networks:
+      islab:
+        ipv4_address: 172.30.1.220
+    extra_hosts:
+      - "ca.blockchain.islab.re.kr:172.30.1.210"
+      - "tlsca.blockchain.islab.re.kr:172.30.1.211"
+      - "couchdb.peer0.blockchain.islab.re.kr:172.30.1.212"
+      - "orderer0.islab.re.kr:172.30.1.100"
+      - "orderer1.islab.re.kr:172.30.1.101"
+      - "orderer2.islab.re.kr:172.30.1.102"
+      - "peer0.service.islab.er.kr:172.30.1.120"
+      - "dapp.islab.re.kr:172.30.1.109"
+
+  cli.peer0.blockchain.islab.re.kr:
+    extra_hosts:
+      - "ca.blockchain.islab.re.kr:172.30.1.210"
+      - "tlsca.blockchain.islab.re.kr:172.30.1.211"
+      - "couchdb.peer0.blockchain.islab.re.kr:172.30.1.212"
+      - "orderer0.islab.re.kr:172.30.1.100"
+      - "orderer1.islab.re.kr:172.30.1.101"
+      - "orderer2.islab.re.kr:172.30.1.102"
+      - "peer0.service.islab.er.kr:172.30.1.120"
+      - "peer0.blockchain.islab.re.kr:172.30.1.220"
+      - "dapp.islab.re.kr:172.30.1.109"

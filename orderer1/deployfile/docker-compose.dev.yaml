@@ -1,0 +1,22 @@
+version: '3'
+
+networks:
+  islab:
+    external:
+      name: islab
+
+
+services:
+  orderer1.islab.re.kr:
+    ports:
+      - 8050:7050
+    networks:
+      islab:
+        ipv4_address: 172.30.1.101
+    extra_hosts:
+      - "couchdb.peer0.service.islab.re.kr:172.30.1.112"
+      - "peer0.service.islab.re.kr:172.30.1.120"
+      - "couchdb.peer0.blockchain.islab.re.kr:172.30.1.212"
+      - "peer0.blockchain.islab.re.kr:172.30.1.220"
+      - "orderer0.islab.re.kr:172.30.1.100"
+      - "orderer2.islab.re.kr:172.30.1.102"

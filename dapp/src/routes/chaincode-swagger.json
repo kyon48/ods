@@ -1,0 +1,584 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "islab-client",
+    "version": "1.0.0"
+  },
+  "basePath": "/",
+  "paths": {
+    "/user/enrollAdmin": {
+      "post": {
+          "tags": [
+            "user"
+          ],
+          "responses": {
+            "200": {
+              "description": "good return"
+            },
+            "500": {
+              "description": "internal error"
+            }
+          },
+          "parameters": [
+              {
+                "name": "data",
+                "description": "data",
+                "required": true,
+                "in": "body",
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                      "orgName":{
+                        "description": "organization name",
+                        "type": "string",
+                        "example": "service"
+                      },
+                      "adminId": {
+                        "description": "admin id",
+                        "type": "string",
+                        "example": "admin"
+                      },
+                      "adminPassword": {
+                        "description": "admin password",
+                        "type": "string",
+                        "example": "adminpw"
+                      }
+                    }
+                }
+              }
+          ]
+      }
+    },
+    "/user/enroll": {
+      "post": {
+          "tags": [
+            "user"
+          ],
+          "responses": {
+            "200": {
+              "description": "good return"
+            },
+            "500": {
+              "description": "internal error"
+            }
+          },
+          "parameters": [
+              {
+                "name": "data",
+                "description": "data",
+                "required": true,
+                "in": "body",
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                      "orgName":{
+                        "description": "organization name",
+                        "type": "string",
+                        "example": "service"
+                      },
+                      "userId": {
+                        "description": "user id",
+                        "type": "string",
+                        "example": "user0"
+                      },
+                      "userPassword": {
+                        "description": "user password",
+                        "type": "string",
+                        "example": "1234"
+                      }
+                    }
+                }
+              }
+          ]
+      }
+    },
+    "/user/reenroll": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "responses": {
+          "200": {
+            "description": "good return"
+          },
+          "500": {
+            "description": "internal error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "data",
+            "description": "data",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "orgName":{
+                  "description": "organization name",
+                  "type": "string",
+                  "example": "service"
+                },
+                "userId": {
+                  "description": "user id",
+                  "type": "string",
+                  "example": "user0"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/user/revoke": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "responses": {
+          "200": {
+            "description": "good return"
+          },
+          "500": {
+            "description": "internal error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "data",
+            "description": "data",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "orgName":{
+                  "description": "organization name",
+                  "type": "string",
+                  "example": "service"
+                },
+                "userId": {
+                  "description": "user id",
+                  "type": "string",
+                  "example": "user0"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/chaincode/CreateAsset": {
+      "post": {
+        "tags": [
+          "chaincode"
+        ],
+        "responses": {
+          "200": {
+            "description": "good return"
+          },
+          "500": {
+            "description": "internal error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "data",
+            "description": "data",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "orgName":{
+                  "description": "organization name",
+                  "type": "string",
+                  "example": "service"
+                },
+                "channelName":{
+                  "description": "channel name",
+                  "type": "string",
+                  "example": "servicechannel"
+                },
+                "chaincodeName":{
+                  "description": "chincode name",
+                  "type": "string",
+                  "example": "asset"
+                },
+                "param": {
+                  "description": "data",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "description": "asset id",
+                      "type": "string",
+                      "example": "asset1"
+                    },
+                    "color": {
+                      "description": "asset color",
+                      "type": "string",
+                      "example": "yellow"
+                    },
+                    "owner": {
+                      "description": "asset owner",
+                      "type": "string",
+                      "example": "jouk"
+                    },
+                    "size": {
+                      "description": "asset color",
+                      "type": "string",
+                      "example": "13"
+                    },
+                    "appraisedValue": {
+                      "description": "asset color",
+                      "type": "string",
+                      "example": "13"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/chaincode/ReadAsset": {
+      "post": {
+        "tags": [
+          "chaincode"
+        ],
+        "responses": {
+          "200": {
+            "description": "good return"
+          },
+          "500": {
+            "description": "internal error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "data",
+            "description": "data",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "orgName":{
+                  "description": "organization name",
+                  "type": "string",
+                  "example": "service"
+                },
+                "channelName":{
+                  "description": "channel name",
+                  "type": "string",
+                  "example": "servicechannel"
+                },
+                "chaincodeName":{
+                  "description": "chincode name",
+                  "type": "string",
+                  "example": "asset"
+                },
+                "param": {
+                  "description": "data",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "description": "asset id",
+                      "type": "string",
+                      "example": "asset1"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/chaincode/UpdateAsset": {
+      "post": {
+        "tags": [
+          "chaincode"
+        ],
+        "responses": {
+          "200": {
+            "description": "good return"
+          },
+          "500": {
+            "description": "internal error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "data",
+            "description": "data",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "orgName":{
+                  "description": "organization name",
+                  "type": "string",
+                  "example": "service"
+                },
+                "channelName":{
+                  "description": "channel name",
+                  "type": "string",
+                  "example": "servicechannel"
+                },
+                "chaincodeName":{
+                  "description": "chincode name",
+                  "type": "string",
+                  "example": "asset"
+                },
+                "param": {
+                  "description": "data",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "description": "asset id",
+                      "type": "string",
+                      "example": "asset1"
+                    },
+                    "color": {
+                      "description": "asset color",
+                      "type": "string",
+                      "example": "yellow"
+                    },
+                    "owner": {
+                      "description": "asset owner",
+                      "type": "string",
+                      "example": "jouk"
+                    },
+                    "size": {
+                      "description": "asset color",
+                      "type": "string",
+                      "example": "13"
+                    },
+                    "appraisedValue": {
+                      "description": "asset color",
+                      "type": "string",
+                      "example": "13"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/chaincode/DeleteAsset": {
+      "post": {
+        "tags": [
+          "chaincode"
+        ],
+        "responses": {
+          "200": {
+            "description": "good return"
+          },
+          "500": {
+            "description": "internal error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "data",
+            "description": "data",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "orgName":{
+                  "description": "organization name",
+                  "type": "string",
+                  "example": "service"
+                },
+                "channelName":{
+                  "description": "channel name",
+                  "type": "string",
+                  "example": "servicechannel"
+                },
+                "chaincodeName":{
+                  "description": "chincode name",
+                  "type": "string",
+                  "example": "asset"
+                },
+                "param": {
+                  "description": "data",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "description": "asset id",
+                      "type": "string",
+                      "example": "asset1"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/chaincode/AssetExists": {
+      "post": {
+        "tags": [
+          "chaincode"
+        ],
+        "responses": {
+          "200": {
+            "description": "good return"
+          },
+          "500": {
+            "description": "internal error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "data",
+            "description": "data",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "orgName":{
+                  "description": "organization name",
+                  "type": "string",
+                  "example": "service"
+                },
+                "channelName":{
+                  "description": "channel name",
+                  "type": "string",
+                  "example": "servicechannel"
+                },
+                "chaincodeName":{
+                  "description": "chincode name",
+                  "type": "string",
+                  "example": "asset"
+                },
+                "param": {
+                  "description": "data",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "description": "asset id",
+                      "type": "string",
+                      "example": "asset1"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/chaincode/TransferAsset": {
+      "post": {
+        "tags": [
+          "chaincode"
+        ],
+        "responses": {
+          "200": {
+            "description": "good return"
+          },
+          "500": {
+            "description": "internal error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "data",
+            "description": "data",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "orgName":{
+                  "description": "organization name",
+                  "type": "string",
+                  "example": "service"
+                },
+                "channelName":{
+                  "description": "channel name",
+                  "type": "string",
+                  "example": "servicechannel"
+                },
+                "chaincodeName":{
+                  "description": "chincode name",
+                  "type": "string",
+                  "example": "asset"
+                },
+                "param": {
+                  "description": "data",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "description": "asset id",
+                      "type": "string",
+                      "example": "asset1"
+                    },
+                    "newOwner": {
+                      "description": "asset new owner",
+                      "type": "string",
+                      "example": "hanho"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/chaincode/GetAllAssets": {
+      "post": {
+        "tags": [
+          "chaincode"
+        ],
+        "responses": {
+          "200": {
+            "description": "good return"
+          },
+          "500": {
+            "description": "internal error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "data",
+            "description": "data",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "orgName":{
+                  "description": "organization name",
+                  "type": "string",
+                  "example": "service"
+                },
+                "channelName":{
+                  "description": "channel name",
+                  "type": "string",
+                  "example": "servicechannel"
+                },
+                "chaincodeName":{
+                  "description": "chincode name",
+                  "type": "string",
+                  "example": "asset"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

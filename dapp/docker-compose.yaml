@@ -1,0 +1,22 @@
+version: '3'
+
+networks:
+  islab:
+    external:
+      name: islab
+
+services:
+  dapp.islab.re.kr:
+    restart: always
+    container_name: dapp.islab.re.kr
+    image: islab-client:0.1
+    environment:
+      - CONNECTION_PROFILE_PATH=/usr/app
+      - FABRIC_CLIENT_LOG_LEVEL=debug
+      - FABRIC_CLIENT_PEER_API_PORT=4000
+    working_dir: /usr/app
+    command: npm run dev
+    volumes:
+      - ./wallet:/usr/app/wallet
+      - ./crypto-config:/usr/app/crypto-config
+      - ./connection-profile.json:/usr/app/connection-profile.json

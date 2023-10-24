@@ -1,0 +1,82 @@
+version: '3'
+
+networks:
+  islab:
+    external:
+      name: islab
+
+services:
+  ca.service.islab.re.kr:
+    restart: always
+    container_name: ca.service.islab.re.kr
+    image: hyperledger/fabric-ca:1.5.5
+    networks:
+      islab:
+        aliases:
+          - ca.service.islab.re.kr
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server-config
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/service.islab.re.kr/ca:/etc/hyperledger/fabric-ca-server-config
+      - ./config/ca/fabric-ca-server-config.yaml:/etc/hyperledger/fabric-ca-server-config/fabric-ca-server-config.yaml
+
+  tlsca.service.islab.re.kr:
+    restart: always
+    container_name: tlsca.service.islab.re.kr
+    image: hyperledger/fabric-ca:1.5.5
+    networks:
+      islab:
+        aliases:
+          - tlsca.service.islab.re.kr
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server-config
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/service.islab.re.kr/tlsca:/etc/hyperledger/fabric-ca-server-config
+      - ./config/tlsca/fabric-ca-server-config.yaml:/etc/hyperledger/fabric-ca-server-config/fabric-ca-server-config.yaml
+
+  couchdb.peer0.service.islab.re.kr:
+    restart: always
+    container_name: couchdb.peer0.service.islab.re.kr
+    # image: couchdb:latest
+    image: couchdb:latest
+    networks:
+      islab:
+        aliases:
+          - couchdb.peer0.service.islab.re.kr
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=password
+
+  peer0.service.islab.re.kr:
+    restart: always
+    container_name: peer0.service.islab.re.kr
+    image: hyperledger/fabric-peer:2.2
+    networks:
+      islab:
+        aliases:
+          - peer0.service.islab.re.kr
+    environment:
+      - FABRIC_CFG_PATH:/etc/hyperledger/fabric
+    working_dir: /etc/hyperledger/fabric
+    volumes:
+      - ./:/etc/hyperledger/fabric
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  cli.peer0.service.islab.re.kr:
+    restart: always
+    container_name: cli.peer0.service.islab.re.kr
+    image: hyperledger/fabric-tools:2.2
+    networks:
+      islab:
+        aliases:
+          - cli.peer0.service.islab.re.kr
+    environment:
+      - GOPATH=/opt/gopath
+      - FABRIC_LOGGING_SPEC=INFO
+    working_dir: /etc/hyperledger/fabric
+    command: sh -c "peer node start"
+    volumes:
+      - ./:/etc/hyperledger/fabric
+      - /var/run/:/host/var/run/`

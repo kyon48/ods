@@ -1,0 +1,23 @@
+version: '3'
+
+networks:
+  islab:
+    external:
+      name: islab
+
+
+services:
+  orderer1.islab.re.kr:
+    restart: always
+    container_name: orderer1.islab.re.kr
+    image: hyperledger/fabric-orderer:2.2
+    networks:
+      islab:
+        aliases:
+          - orderer1.islab.re.kr
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/fabric
+      - FABRIC_LOGGING_SPEC=info
+    working_dir: /etc/hyperledger/fabric
+    volumes:
+      - ./:/etc/hyperledger/fabric

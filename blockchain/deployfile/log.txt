@@ -1,0 +1,2 @@
+Installed chaincodes on peer:
+Package ID: asset_1.0:6d6a1bfd139504b4ce27a0052dd1094baa06337b8e6fc7fefe61e1aa8a2ce82e, Label: asset_1.0
