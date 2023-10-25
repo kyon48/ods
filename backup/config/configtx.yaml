@@ -1,0 +1,183 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+---
+Organizations:
+  - &OrdererOrg
+    Name: ordererMSP
+    ID: ordererMSP
+    MSPDir: crypto-config/ordererOrganizations/islab.re.kr/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('ordererMSP.member')"
+      Writers:
+        Type: Signature
+        Rule: "OR('ordererMSP.member')"
+      Admins:
+        Type: Signature
+        Rule: "OR('ordererMSP.admin')"
+
+  - &Service
+    Name: serviceMSP
+    ID: serviceMSP
+    MSPDir: crypto-config/peerOrganizations/service.islab.re.kr/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('serviceMSP.member', 'serviceMSP.peer', 'serviceMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('serviceMSP.member', 'serviceMSP.peer', 'serviceMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('serviceMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: OR("serviceMSP.peer")
+    OrdererEndpoints: *ref_0
+    AnchorPeers:
+      - Host: peer0.service.islab.re.kr
+        Port: 7051
+
+  - &Blockchain
+    Name: blockchainMSP
+    ID: blockchainMSP
+    MSPDir: crypto-config/peerOrganizations/blockchain.islab.re.kr/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('blockchainMSP.member', 'blockchainMSP.peer', 'blockchainMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('blockchainMSP.member', 'blockchainMSP.peer', 'blockchainMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('blockchainMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: OR("blockchainMSP.peer")
+    OrdererEndpoints: *ref_0
+    AnchorPeers:
+      - Host: peer0.blockchain.islab.re.kr
+        Port: 9051
+
+Capabilities:
+  Channel: &ChannelCapabilities
+    V2_0: true
+
+  Orderer: &OrdererCapabilities
+    V2_0: true
+
+  Application: &ApplicationCapabilities
+    V2_0: true
+
+Application: &ApplicationDefaults
+  Organizations:
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+    LifecycleEndorsement:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Endorsement"
+    Endorsement:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Endorsement"
+
+  Capabilities:
+    <<: *ApplicationCapabilities
+
+Orderer: &OrdererDefaults
+  OrdererType: etcdraft
+  Addresses: &ref_0
+    - orderer0.islab.re.kr:7050
+    - orderer1.islab.re.kr:7050
+    - orderer2.islab.re.kr:7050
+  EtcdRaft:
+    Consenters:
+      - Host: orderer0.islab.re.kr
+        Port: 7050
+        ClientTLSCert: crypto-config/ordererOrganizations/islab.re.kr/orderers/orderer0.islab.re.kr/tls/server.crt
+        ServerTLSCert: crypto-config/ordererOrganizations/islab.re.kr/orderers/orderer0.islab.re.kr/tls/server.crt
+      - Host: orderer1.islab.re.kr
+        Port: 7050
+        ClientTLSCert: crypto-config/ordererOrganizations/islab.re.kr/orderers/orderer1.islab.re.kr/tls/server.crt
+        ServerTLSCert: crypto-config/ordererOrganizations/islab.re.kr/orderers/orderer1.islab.re.kr/tls/server.crt
+      - Host: orderer2.islab.re.kr
+        Port: 7050
+        ClientTLSCert: crypto-config/ordererOrganizations/islab.re.kr/orderers/orderer2.islab.re.kr/tls/server.crt
+        ServerTLSCert: crypto-config/ordererOrganizations/islab.re.kr/orderers/orderer2.islab.re.kr/tls/server.crt
+    Options:
+      TickInterval: 500ms
+      ElectionTick: 10
+      HeartbeatTick: 1
+      MaxInflightBlocks: 100
+      SnapshotIntervalSize: 20 MB
+  BatchTimeout: 1
+  BatchSize:
+    MaxMessageCount: 1000
+    AbsoluteMaxBytes: 500 MB
+    PreferredMaxBytes: 200 MB
+  Organizations:
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+    BlockValidation:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+
+Channel: &ChannelDefaults
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+  Capabilities:
+    <<: *ChannelCapabilities
+
+Profiles:
+  systemChannel:
+    <<: *ChannelDefaults
+    Orderer:
+      <<: *OrdererDefaults
+      Organizations:
+        - *OrdererOrg
+      Capabilities:
+        <<: *OrdererCapabilities
+    Consortiums:
+      Islab:
+        Organizations:
+          - *Service
+          - *Blockchain
+
+  servicechannel:
+    Consortium: Islab
+    <<: *ChannelDefaults
+    Application:
+      <<: *ApplicationDefaults
+      Organizations:
+        - *Service
+        - *Blockchain
+      Capabilities:
+        <<: *ApplicationCapabilities

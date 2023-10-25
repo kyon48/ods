@@ -1,0 +1,135 @@
+version: '3'
+
+networks:
+  islab:
+    external:
+      name: islab
+
+services:
+  ca.service.islab.re.kr:
+    restart: always
+    container_name: ca.service.islab.re.kr
+    image: hyperledger/fabric-ca:amd64-1.5.5
+    platform: linux/amd64
+    networks:
+      islab:
+        aliases:
+          - ca.service.islab.re.kr
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.service.islab.re.kr
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.service.islab.re.kr-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/f11df670f94771f1fc701808e5fb4c78ba8f9f8e8a318fdc49d1fc3e67becf28_sk
+
+      # TLS
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.service.islab.re.kr-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/f11df670f94771f1fc701808e5fb4c78ba8f9f8e8a318fdc49d1fc3e67becf28_sk
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/service.islab.re.kr/ca:/etc/hyperledger/fabric-ca-server-config
+
+  tlsca.service.islab.re.kr:
+    restart: always
+    container_name: tlsca.service.islab.re.kr
+    image: hyperledger/fabric-ca:amd64-1.5.5
+    platform: linux/amd64
+    networks:
+      islab:
+        aliases:
+          - tlsca.service.islab.re.kr
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=tlsca.service.islab.re.kr
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/tlsca.service.islab.re.kr-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/2d2e2ce0ad0b309df1c4878854774ecf6517ca02adb715d105396253d4df6d8a_sk
+
+      # TLS
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/tlsca.service.islab.re.kr-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/2d2e2ce0ad0b309df1c4878854774ecf6517ca02adb715d105396253d4df6d8a_sk
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/service.islab.re.kr/tlsca:/etc/hyperledger/fabric-ca-server-config
+
+  couchdb.peer0.service.islab.re.kr:
+    restart: always
+    container_name: couchdb.peer0.service.islab.re.kr
+    # image: couchdb:latest
+    image: couchdb-amd64:0.1
+    networks:
+      islab:
+        aliases:
+          - couchdb.peer0.service.islab.re.kr
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=password
+
+  peer0.service.islab.re.kr:
+    restart: always
+    container_name: peer0.service.islab.re.kr
+    image: hyperledger/fabric-peer:amd64-2.2
+    platform: linux/amd64
+    networks:
+      islab:
+        aliases:
+          - peer0.service.islab.re.kr
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/fabric
+      #Generic peer variables
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=crypto-config/peerOrganizations/service.islab.re.kr/peers/peer0.service.islab.re.kr/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=crypto-config/peerOrganizations/service.islab.re.kr/peers/peer0.service.islab.re.kr/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=crypto-config/peerOrganizations/service.islab.re.kr/peers/peer0.service.islab.re.kr/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_MSPCONFIGPATH=crypto-config/peerOrganizations/service.islab.re.kr/peers/peer0.service.islab.re.kr/msp
+      - CORE_PEER_ID=peer0.service.islab.re.kr
+      - CORE_PEER_ADDRESS=peer0.service.islab.re.kr:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.service.islab.re.kr:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.service.islab.re.kr:7051
+      - CORE_PEER_LOCALMSPID=serviceMSP
+      # Peer Client
+      - CORE_PEER_TLS_CLIENTAUTHREQUIRED=true
+      - CORE_PEER_TLS_CLIENTCERT_FILE=crypto-config/peerOrganizations/service.islab.re.kr/users/Admin@service.islab.re.kr/tls/client.crt
+      - CORE_PEER_TLS_CLIENTKEY_FILE=crypto-config/peerOrganizations/service.islab.re.kr/users/Admin@service.islab.re.kr/tls/client.key
+      - CORE_PEER_TLS_CLIENTROOTCAS_FILES=crypto-config/peerOrganizations/service.islab.re.kr/users/Admin@service.islab.re.kr/tls/ca.crt
+      # CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer0.service.islab.re.kr:5984
+    working_dir: /etc/hyperledger/fabric
+    volumes:
+      - ./:/etc/hyperledger/fabric
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  cli.peer0.service.islab.re.kr:
+    restart: always
+    container_name: cli.peer0.service.islab.re.kr
+    image: hyperledger/fabric-tools:amd64-2.2
+    networks:
+      islab:
+        aliases:
+          - cli.peer0.service.islab.re.kr
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/fabric
+      #Generic peer variables
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=crypto-config/peerOrganizations/service.islab.re.kr/peers/peer0.service.islab.re.kr/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=crypto-config/peerOrganizations/service.islab.re.kr/peers/peer0.service.islab.re.kr/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=crypto-config/peerOrganizations/service.islab.re.kr/peers/peer0.service.islab.re.kr/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_MSPCONFIGPATH=crypto-config/peerOrganizations/service.islab.re.kr/peers/peer0.service.islab.re.kr/msp
+      - CORE_PEER_ID=peer0.service.islab.re.kr
+      - CORE_PEER_ADDRESS=peer0.service.islab.re.kr:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.service.islab.re.kr:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.service.islab.re.kr:7051
+      - CORE_PEER_LOCALMSPID=serviceMSP
+      - CORE_LEDGER_STATE_STATEDATABASE=goleveldb
+      # Peer Client
+      - CORE_PEER_TLS_CLIENTAUTHREQUIRED=true
+      - CORE_PEER_TLS_CLIENTCERT_FILE=crypto-config/peerOrganizations/service.islab.re.kr/users/Admin@service.islab.re.kr/tls/client.crt
+      - CORE_PEER_TLS_CLIENTKEY_FILE=crypto-config/peerOrganizations/service.islab.re.kr/users/Admin@service.islab.re.kr/tls/client.key
+      - CORE_PEER_TLS_CLIENTROOTCAS_FILES=crypto-config/peerOrganizations/service.islab.re.kr/users/Admin@service.islab.re.kr/tls/ca.crt
+    working_dir: /etc/hyperledger/fabric
+    command: sh -c "peer node start"
+    volumes:
+      - ./:/etc/hyperledger/fabric
+      - /var/run/docker.sock:/var/run/docker.sock

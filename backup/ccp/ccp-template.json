@@ -1,0 +1,62 @@
+{
+  "name": "metaverse-${ORG}",
+  "version": "1.0.0",
+  "client": {
+      "organization": "${ORG}",
+      "connection": {
+          "timeout": {
+              "peer": {
+                  "endorser": "300"
+              }
+          }
+      }
+  },
+  "channels": {
+    "ptc": {
+      "orderers": [
+        "orderer0.islab.re.kr",
+        "orderer1.islab.re.kr",
+        "orderer2.islab.re.kr"
+      ],
+      "peers": [
+        "peer0.service.islab.re.kr",
+        "peer0.blockchain.islab.re.kr"
+      ]
+    }
+  },
+  "organizations": {
+      "${ORG}MSP": {
+          "mspid": "${MSPORG}MSP",
+          "peers": [
+              "peer0.${ORG}.islab.re.kr"
+          ],
+          "certificateAuthorities": [
+              "ca.${ORG}.islab.re.kr"
+          ]
+      }
+  },
+  "peers": {
+      "peer0.${ORG}.islab.re.kr": {
+          "url": "grpcs://peer0.${ORG}.islab.re.kr:${P0PORT}",
+          "tlsCACerts": {
+              "pem": "${PEERPEM}"
+          },
+          "grpcOptions": {
+              "ssl-target-name-override": "peer0.${ORG}.islab.re.kr",
+              "hostnameOverride": "peer0.${ORG}.islab.re.kr"
+          }
+      }
+  },
+  "certificateAuthorities": {
+      "ca.${ORG}.islab.re.kr": {
+          "url": "https://ca.${ORG}.islab.re.kr:${CAPORT}",
+          "caName": "ca.${ORG}.islab.re.kr",
+          "tlsCACerts": {
+              "pem": ["${CAPEM}"]
+          },
+          "httpOptions": {
+              "verify": false
+          }
+      }
+  }
+}

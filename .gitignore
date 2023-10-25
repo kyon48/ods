@@ -1,0 +1,10 @@
+# go chaincode vendor
+**/vendor/
+
+# network artifacts
+**/build/
+**/block/
+**/channel-block/
+**/crypto-config/
+
+*.tar.gz

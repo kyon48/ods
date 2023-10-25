@@ -1,0 +1,34 @@
+version: '3'
+
+networks:
+  islab:
+    external:
+      name: islab
+
+
+services:
+  ca.service.islab.re.kr:
+      ports:
+        - 7054:7054
+
+  tlsca.service.islab.re.kr:
+      ports:
+        - 7055:7055
+
+  couchdb.peer0.service.islab.re.kr:
+    ports:
+      - 6984:5984
+    extra_hosts:
+      - "orderer0.islab.re.kr:172.30.1.200"
+      - "orderer1.islab.re.kr:172.30.1.201"
+      - "orderer2.islab.re.kr:172.30.1.202"
+
+  peer0.service.islab.re.kr:
+    ports:
+      - 7051:7051
+      - 7052:7052
+      - 7053:7053
+    extra_hosts:
+      - "orderer0.islab.re.kr:172.30.1.200"
+      - "orderer1.islab.re.kr:172.30.1.201"
+      - "orderer2.islab.re.kr:172.30.1.202"

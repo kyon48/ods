@@ -1,0 +1,44 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+OrdererOrgs:
+  - Name: orderer
+    Domain: islab.re.kr
+    EnableNodeOUs: true
+    Specs:
+      - Hostname: orderer0
+      - Hostname: orderer1
+      - Hostname: orderer2
+
+PeerOrgs:
+  - Name: service
+    Domain: service.islab.re.kr
+    EnableNodeOUs: true
+    Template:
+      Count: 1
+    Users:
+      Count: 1
+    Specs:
+      - Hostname: peer0
+        CommonName: peer0.service.islab.re.kr
+        SANS:
+          - peer0.service.islab.re.kr
+          - localhost
+          - 127.0.0.1
+
+  - Name: blockchain
+    Domain: blockchain.islab.re.kr
+    EnableNodeOUs: true
+    Template:
+      Count: 1
+    Users:
+      Count: 1
+    Specs:
+      - Hostname: peer0
+        CommonName: peer0.blockchain.islab.re.kr
+        SANS:
+          - peer0.blockchain.islab.re.kr
+          - localhost
+          - 127.0.0.1

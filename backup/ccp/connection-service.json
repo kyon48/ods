@@ -1,0 +1,137 @@
+{
+  "client": {
+    "tlsEnable": true,
+    "caCredential": {
+      "id": "admin",
+      "password": "adminpw"
+    },
+    "adminCredential": {
+      "id": "exploreradmin",
+      "password": "exploreradminpw"
+    },
+    "enableAuthentication": true,
+    "organization": "service.islab.re.kr"
+  },
+  "name": "islab",
+  "x-type": "hlfv2",
+  "description": "for test",
+  "version": "1.0",
+  "channels": {
+    "ptc": {
+      "orderers": [
+        "orderer0.islab.re.kr",
+        "orderer1.islab.re.kr",
+        "orderer2.islab.re.kr"
+      ],
+      "peers": [
+        "peer0.service.islab.re.kr",
+        "peer0.blockchain.islab.re.kr"
+      ]
+    }
+  },
+  "organizations": {
+    "service.islab.re.kr": {
+      "mspid": "serviceMSP",
+      "adminPrivateKey": {
+        "path": "/etc/hyperledger/fabric/crypto-config/peerOrganizations/service.islab.re.kr/users/Admin@service.islab.re.kr/msp/keystore/priv_sk"
+      },
+      "peers": [
+        "peer0.service.islab.re.kr"
+      ],
+      "signedCert": {
+        "path": "/etc/hyperledger/fabric/crypto-config/peerOrganizations/service.islab.re.kr/users/Admin@service.islab.re.kr/msp/signcerts/Admin@service.islab.re.kr-cert.pem"
+      }
+    },
+    "blockchain.islab.re.kr": {
+      "mspid": "blockchainMSP",
+      "adminPrivateKey": {
+        "path": "/etc/hyperledger/fabric/crypto-config/peerOrganizations/blockchain.islab.re.kr/users/Admin@blockchain.islab.re.kr/msp/keystore/priv_sk"
+      },
+      "peers": [
+        "peer0.blockchain.islab.re.kr"
+      ],
+      "signedCert": {
+        "path": "/etc/hyperledger/fabric/crypto-config/peerOrganizations/blockchain.islab.re.kr/users/Admin@blockchain.islab.re.kr/msp/signcerts/Admin@blockchain.islab.re.kr-cert.pem"
+      }
+    }
+  },
+  "orderers": {
+    "orderer0.islab.re.kr": {
+      "url": "grpcs://orderer0.islab.re.kr:7050",
+      "grpcOptions": {
+        "ssl-target-name-override": "orderer0.islab.re.kr"
+      },
+      "tlsCACerts": {
+        "path": "/etc/hyperledger/fabric/crypto-config/ordererOrganizations/islab.re.kr/orderers/orderer0.islab.re.kr/tls/ca.crt"
+      }
+    },
+    "orderer1.islab.re.kr": {
+      "url": "grpcs://orderer1.islab.re.kr:7050",
+      "grpcOptions": {
+        "ssl-target-name-override": "orderer1.islab.re.kr"
+      },
+      "tlsCACerts": {
+        "path": "/etc/hyperledger/fabric/crypto-config/ordererOrganizations/islab.re.kr/orderers/orderer1.islab.re.kr/tls/ca.crt"
+      }
+    },
+    "orderer2.islab.re.kr": {
+      "url": "grpcs://orderer2.islab.re.kr:7050",
+      "grpcOptions": {
+        "ssl-target-name-override": "orderer2.islab.re.kr"
+      },
+      "tlsCACerts": {
+        "path": "/etc/hyperledger/fabric/crypto-config/ordererOrganizations/islab.re.kr/orderers/orderer2.islab.re.kr/tls/ca.crt"
+      }
+    }
+  },
+  "peers": {
+    "peer0.service.islab.re.kr": {
+      "url": "grpcs://peer0.service.islab.re.kr:7051",
+      "grpcOptions": {
+        "ssl-target-name-override": "peer0.service.islab.re.kr"
+      },
+      "tlsCACerts": {
+        "path": "/etc/hyperledger/fabric/crypto-config/peerOrganizations/service.islab.re.kr/peers/peer0.service.islab.re.kr/tls/ca.crt"
+      }
+    },
+    "peer0.blockchain.islab.re.kr": {
+      "url": "grpcs://peer0.blockchain.islab.re.kr:9051",
+      "grpcOptions": {
+        "ssl-target-name-override": "peer0.blockchain.islab.re.kr"
+      },
+      "tlsCACerts": {
+        "path": "/etc/hyperledger/fabric/crypto-config/peerOrganizations/blockchain.islab.re.kr/peers/peer0.blockchain.islab.re.kr/tls/ca.crt"
+      }
+    }
+},
+"certificateAuthorities": {
+    "ca.service.islab.re.kr": {
+      "url": "https://ca.service.islab.re.kr:7054",
+      "httpOptions": {
+        "verify": false
+      },
+      "tlsCACerts": {
+        "path": "/etc/hyperledger/fabric/crypto-config/peerOrganizations/service.islab.re.kr/ca/ca.service.islab.re.kr-cert.pem"
+      },
+      "caName": "ca.service.islab.re.kr",
+      "registrar": {
+        "enrollID": "admin",
+        "enrollSecret": "adminpw"
+      }
+    },
+    "ca.blockchain.islab.re.kr": {
+      "url": "https://ca.blockchain.islab.re.kr:8054",
+      "httpOptions": {
+        "verify": false
+      },
+      "tlsCACerts": {
+        "path": "/etc/hyperledger/fabric/crypto-config/peerOrganizations/blockchain.islab.re.kr/ca/ca.blockchain.islab.re.kr-cert.pem"
+      },
+      "caName": "ca.blockchain.islab.re.kr",
+      "registrar": {
+        "enrollID": "admin",
+        "enrollSecret": "adminpw"
+      }
+    }
+  }
+}

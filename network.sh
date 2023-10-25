@@ -7,6 +7,7 @@ NET=islab
 GATEWAY="172.30.1.1"
 SUBNET="172.30.1.0/24"
 
+BACKUP_FOLDER=${PWD}/backup
 ORDERER0_FOLDER=${PWD}/orderer0/deployfile
 ORDERER1_FOLDER=${PWD}/orderer1/deployfile
 ORDERER2_FOLDER=${PWD}/orderer2/deployfile
@@ -23,6 +24,7 @@ function network_usage {
   echo " network (ca, orderer) "
   echo "-------------------------------------------------------------------------"
   echo " Commands"
+	echo " - backup    : generate new crypto artifacts for blockchain network."
 	echo " - build    : build artifacts for fabric network with orderer."
 	echo " - rebuild    : rebuild (rm -rf build & build)"
 	echo " - up   : peer node up"
@@ -33,6 +35,29 @@ function network_usage {
 	echo " - deploy    : install and commit the chaincode on channel"
 	echo " - clean  	: clean artifacts"
 	echo "-------------------------------------------------------------------------"
+}
+
+function func_backup {
+	if [ -d "$BACKUP_FOLDER" ]; then
+    pushd $BACKUP_FOLDER
+      exec="./backup.sh all"
+      $exec
+
+      exec="./backup.sh copy"
+      $exec
+
+      exec="./backup.sh clean_chaincode"
+      $exec
+
+      exec="./backup.sh chaincode $CC_NAME $CC_LANG"
+      $exec
+
+      exec="./backup.sh copy_chaincode $CC_NAME"
+      $exec
+    popd
+  else
+    cecho "RED" "BACKUP_FOLDER are not exist"
+  fi
 }
 
 function func_build {
@@ -246,7 +271,7 @@ function func_dapp {
 
 function main {
   case $1 in
-    build | rebuild | up | create | join | clean | package | chaincodeinstall | deploy | only_build | dapp | all )
+    backup | build | rebuild | up | create | join | clean | package | chaincodeinstall | deploy | only_build | dapp | all )
       cmd=func_$1
       shift
       $cmd $@
