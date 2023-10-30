@@ -269,9 +269,68 @@ function func_dapp {
   fi
 }
 
+function func_clear {
+	if [ -d "$BACKUP_FOLDER" ]; then
+    pushd $BACKUP_FOLDER
+      rm -rf build chaincode/asset/vendor
+    popd
+  else
+    cecho "RED" "BACKUP_FOLDER are not exist"
+  fi
+
+	if [ -d "$BLOCKCHAIN_FOLDER" ]; then
+    pushd $BLOCKCHAIN_FOLDER
+      rm -rf block chaincode channel-block crypto-config asset.tar.gz log.txt
+    popdR
+  else
+    cecho "RED" "BLOCKCHAIN FOLDER are not exist"
+  fi
+
+	if [ -d "$SERVICE_FOLDER" ]; then
+    pushd $SERVICE_FOLDER
+      rm -rf block chaincode channel-block crypto-config asset.tar.gz log.txt
+    popd
+  else
+    cecho "RED" "SERVICE FOLDER are not exist"
+  fi
+
+	if [ -d "$DAPP_FOLDER" ]; then
+    pushd $DAPP_FOLDER
+      rm -rf crypto-config
+    popd    
+  else
+    cecho "RED" "DAPP FOLDER are not exist"
+  fi
+
+	if [ -d "$ORDERER0_FOLDER" ]; then
+    pushd $ORDERER0_FOLDER
+      rm -rf block chaincode channel-block crypto-config
+    popd    
+  else
+    cecho "RED" "ORDERER0_FOLDER are not exist"
+  fi
+  
+	if [ -d "$ORDERER1_FOLDER" ]; then
+    pushd $ORDERER1_FOLDER
+      rm -rf block chaincode channel-block crypto-config
+    popd    
+  else
+    cecho "RED" "ORDERER1_FOLDER are not exist"
+  fi
+  
+	if [ -d "$ORDERER2_FOLDER" ]; then
+    pushd $ORDERER2_FOLDER
+      rm -rf block chaincode channel-block crypto-config
+    popd    
+  else
+    cecho "RED" "ORDERER2_FOLDER are not exist"
+  fi
+
+}
+
 function main {
   case $1 in
-    backup | build | rebuild | up | create | join | clean | package | chaincodeinstall | deploy | only_build | dapp | all )
+    backup | build | rebuild | up | create | join | clean | package | chaincodeinstall | deploy | only_build | dapp | all | clear )
       cmd=func_$1
       shift
       $cmd $@
